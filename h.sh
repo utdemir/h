@@ -14,11 +14,11 @@ function _h_main() {
 
   case "$#" in
     0)
-      local path=""
+      local loc=""
     ;;
     1)
       if [[ -d "$_h_workspace/$1" ]]; then
-        local path="$1"
+        local loc="$1"
       elif [[ "$1" =~ ^($ghchr+)/($ghchr+)$ ]] ||
            [[ "$1" =~ ^github.com/($ghchr+)/($ghchr+)(.git)?/?$ ]] ||
            [[ "$1" =~ ^https://github.com/($ghchr+)/($ghchr+)(.git)?/?$ ]] ||
@@ -26,7 +26,7 @@ function _h_main() {
         local user="${BASH_REMATCH[1]}"
         local repo="${BASH_REMATCH[2]}"
         local url="https://github.com/$user/$repo"
-        local path="github.com/$user/$repo"
+        local loc="github.com/$user/$repo"
       else
         echo "invalid-syntax" >&2
         return 1
@@ -34,14 +34,14 @@ function _h_main() {
     ;;
     2)
       local url="$1"
-      local path="$2"
+      local loc="$2"
     ;;
     *)
       echo "invalid-syntax" >&2
       return 1
   esac
 
-  local target="$_h_workspace/$path"
+  local target="$_h_workspace/$loc"
   if ! [[ -d "$target" ]]; then
     local tmpdir="$(mktemp -d)"
     git clone "$url" "$tmpdir"
